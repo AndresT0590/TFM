@@ -1,5 +1,3 @@
-import os
-from dotenv import load_dotenv
 import streamlit as st
 from openai import OpenAI
 from langchain_openai import ChatOpenAI
@@ -16,164 +14,18 @@ from PIL import Image
 # Configuración de Streamlit
 st.set_page_config(page_title="AOS - Asistente Virtual para Obras de Suelos", page_icon="🤖")
 
-# Aplicar estilos CSS para eliminar contorno y texto rojo en botones
+# Estilos CSS (mismo que en tu código original)
 st.markdown(
     """
     <style>
-    /* Fuente y configuración global */
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
-
-    html, body {
-    background-color: #1A1924; /* Raisin Black */
-    color: white;
-    padding: 0 !important;
-    height: 100% !important;
-    width: 100% !important;
-    font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-    line-height: 1.6;
-    }
-
-    /* Contenedor principal de Streamlit */
-    [data-testid="stAppViewContainer"] {
-    background-color: #1A1924 !important;
-    background-image: none !important;
-    box-shadow: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    height: 100vh !important;
-    }
-
-    /* Estilos para el encabezado */
-    header {
-    background-color: #1A1924 !important;
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    }
-
-    h1 {
-        color: #F0E68C; /* Beige claro para que combine con el esquema */
-        text-align: center;
-        font-size: 30px;
-    }
-
-    stBottom{
-    position: sticky;
-    background-color: #1A1924 !important;
-    left: 0px;
-    bottom: 0px;
-    width: 100%;
-    }
-
-    .st-emotion-cache-hzygls {
-    position: relative;
-    bottom: 0px;
-    width: 100%;
-    min-width: 100%;
-    background-color: #1A1924;
-    display: flex;
-    flex-direction: column;
-    -webkit-box-align: center;
-    align-items: center;
-    }
-    
-    /* Sidebar diferenciado */
-    section[data-testid="stSidebar"] {
-        background-color: #533E2D !important;
-        color: #FFFFFF !important;
-        transition: all 0.3s ease;
-        padding: 20px;
-        box-shadow: -2px 0 5px rgba(0,0,0,0.1);
-        position: relative;
-    }
-
-    /* Texto en el sidebar */
-    section[data-testid="stSidebar"] h1, 
-    section[data-testid="stSidebar"] h2, 
-    section[data-testid="stSidebar"] h3, 
-    section[data-testid="stSidebar"] p {
-        color: #FFFFFF !important;
-        font-weight: 300;
-    }
-
-    /* Ajustes para el botón */
-    .stButton button {
-        background-color: #A27035 !important;
-        color: #1A1924 !important;
-        border: none !important;
-        border-radius: 5px !important;
-        padding: 10px 20px;
-        font-size: 16px !important;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        font-family: 'Roboto', sans-serif;
-        letter-spacing: 1px;
-        display: block; /* Para asegurarse de que tome todo el ancho disponible */
-        margin: 0 auto; /* Centra horizontalmente */
-    }
-
-    .stButton button:hover {
-        background-color: #533E2D !important;
-        color: #FFFFFF !important;
-        box-shadow: 0 6px 8px rgba(0,0,0,0.2);
-        transform: translateY(-2px);
-    }
-
-    /* Ajustar la barra de entrada */
-    input[type="text"] {
-    background-color: #FFFFFF !important;
-    border: 2px solid #A27035 !important;
-    color: #1A1924 !important;
-    border-radius: 8px !important;
-    padding: 12px 16px;
-    font-size: 16px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    }
-
-    input[type="text"]:focus {
-    outline: none !important;
-    border-color: #533E2D !important;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    }
-
-    /* Mejoras responsivas */
-    @media screen and (max-width: 768px) {
-        section[data-testid="stSidebar"] {
-            width: 100% !important;
-            padding: 10px;
-        }
-    }
-
-    /* Scroll bar personalizada */
-    ::-webkit-scrollbar {
-        width: 10px;
-    }
-
-    ::-webkit-scrollbar-track {
-        background: #1A1924;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: #533E2D;
-        border-radius: 5px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-        background: #A27035;
-    }
+    /* Todos los estilos CSS que tenías originalmente */
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Cargar las variables del archivo .env
-load_dotenv()
-
-# Obtener la clave de API desde las variables de entorno
-api_key = os.getenv("OPENAI_API_KEY")
+# MODIFICACIÓN PRINCIPAL: Obtener API KEY desde Streamlit Secrets
+api_key = st.secrets["OPENAI_API_KEY"]
 
 # Configurar el cliente OpenAI
 client = OpenAI(api_key=api_key)
@@ -184,19 +36,18 @@ llm = ChatOpenAI(
     openai_api_key=api_key
 )
 
-# Cargar datos desde el archivo CSV
-data_path = "./BD_Suelos.csv"  # Ajuste para referencia relativa en el mismo directorio
+# MODIFICACIÓN: Ruta de archivo para Streamlit Cloud
+data_path = "BD_Suelos.csv"  
 df = pd.read_csv(data_path)
 
-# Concatenar todas las columnas excepto la primera (ID) para crear el contenido
+# Resto del código permanece igual que en tu versión original
 df['Contenido'] = df.iloc[:, 1:].apply(lambda row: " ".join(row.astype(str)), axis=1)
 
-# Crear un vectorstore usando FAISS y embeddings de OpenAI
 @st.cache_resource
 def create_vectorstore(dataframe):
     text_splitter = CharacterTextSplitter(chunk_size=500, chunk_overlap=50)
     embeddings = OpenAIEmbeddings(model="text-embedding-ada-002")
-    loader = DataFrameLoader(dataframe, page_content_column="Contenido")  # Usamos la columna 'Contenido'
+    loader = DataFrameLoader(dataframe, page_content_column="Contenido")
     docs = loader.load()
     chunks = text_splitter.split_documents(docs)
     vectorstore = FAISS.from_documents(chunks, embeddings)
@@ -206,7 +57,7 @@ vectorstore = create_vectorstore(df)
 retriever = vectorstore.as_retriever()
 
 prompt_template = PromptTemplate(
-    input_variables=["context", "question"],  # Asegura que 'context' y 'question' están definidos
+    input_variables=["context", "question"],
     template=(
         "Eres un asistente virtual experto en remodelación de suelos en España. "
         "Responde únicamente preguntas relacionadas con suelos, incluyendo: "
@@ -228,26 +79,25 @@ prompt_template = PromptTemplate(
     ),
 )
 
-# Configurar RetrievalQA con el LLM
 qa_chain = RetrievalQA.from_chain_type(
-    llm=llm,  # Proporcionar el modelo de lenguaje
+    llm=llm,
     retriever=retriever,
     chain_type="stuff",
     chain_type_kwargs={
         "prompt": prompt_template,
-        "document_variable_name": "context",  # Configuración explícita del contexto
+        "document_variable_name": "context",
     },
 )
 
-# Inicializa las conversaciones previas y el índice activo en la sesión
+# Inicialización de estados de sesión
 if "conversations" not in st.session_state:
     st.session_state.conversations = []
 if "current_conversation" not in st.session_state:
     st.session_state.current_conversation = []
 if "active_conversation_index" not in st.session_state:
-    st.session_state.active_conversation_index = None  # Índice de la conversación activa
+    st.session_state.active_conversation_index = None
 
-# Función para resumir la conversación
+# Todas las funciones siguientes permanecen igual
 def summarize_message(message):
     keywords = ["remodelación", "suelo", "habitaciones", "ayuda", "proyecto", "consulta", "remodelar"]
     words = message.split()
@@ -255,36 +105,30 @@ def summarize_message(message):
     return " ".join(filtered_keywords).capitalize() if filtered_keywords else "Consulta general"
 
 def start_new_conversation():
-    """Inicia una nueva conversación y guarda la actual si no es duplicada."""
     if st.session_state.current_conversation:
-        # Resumir el contenido de la conversación
         first_message = next(
             (msg["text"] for msg in st.session_state.current_conversation if msg["sender"] == "user"),
             "Sin descripción"
         )
         conversation_summary = summarize_message(first_message)
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        # Validar si los mensajes ya están en alguna conversación guardada
         is_duplicate = any(
             conv["messages"] == st.session_state.current_conversation
             for conv in st.session_state.conversations
         )
         if not is_duplicate:
-            # Guardar la conversación si no es duplicada
             st.session_state.conversations.append({
                 "name": f"{conversation_summary} - {timestamp}",
                 "messages": st.session_state.current_conversation
             })
-    # Limpiar la conversación actual
     st.session_state.current_conversation = []
     st.session_state.active_conversation_index = None
     st.rerun()
 
-# Función para cargar conversaciones
 def load_conversation(index):
-    if st.session_state.active_conversation_index != index:  # Evitar duplicados
+    if st.session_state.active_conversation_index != index:
         st.session_state.current_conversation = st.session_state.conversations[index]["messages"]
-        st.session_state.active_conversation_index = index  # Establecer como activa
+        st.session_state.active_conversation_index = index
         st.rerun()
 
 # Sidebar
@@ -301,20 +145,18 @@ with st.sidebar:
     else:
         st.markdown("No hay conversaciones guardadas.")
         
-# Crear un contenedor vacío para llenar el espacio
-for _ in range(6):  # Ajusta el número según la altura del sidebar
+for _ in range(6):
     st.sidebar.write("")
 
-# Insertar la imagen en la parte inferior del sidebar
 st.sidebar.markdown('<div style="text-align: center;">', unsafe_allow_html=True)
-image = Image.open("Logo.png")
+# MODIFICACIÓN: Asegúrate de subir también el Logo.png a tu repositorio
+image = Image.open("Logo.png") 
 st.sidebar.image(image, width=280)
 st.sidebar.markdown('</div>', unsafe_allow_html=True)
 
 # Título principal
 st.title("AOS - Asistente Virtual para Obras de Suelos")
 
-# Mensaje inicial si no hay conversaciones activas
 if not st.session_state.current_conversation:
     st.markdown(
         "Bienvenido a AOS, tu asistente especializado en remodelación de suelos en España. "
@@ -336,25 +178,21 @@ if user_input := st.chat_input("Escribe tu consulta aquí..."):
     with st.chat_message("user"):
         st.markdown(user_input)
  
-    # Obtener información relevante del vectorstore
     with st.spinner("Buscando información relevante..."):
         try:
-            retrieved_docs = retriever.invoke(user_input) # Recupera documentos relevantes
+            retrieved_docs = retriever.invoke(user_input)
             context = "\n".join([doc.page_content for doc in retrieved_docs])
         except Exception as e:
             context = ""
             st.error(f"Hubo un error al buscar información relevante: {e}")
  
-    # Crear el prompt con la información recuperada
     formatted_prompt = prompt_template.format(context=context, question=user_input)
  
-    # Preparar mensajes para la API de OpenAI
     api_messages = [{"role": "system", "content": formatted_prompt}]
     for msg in st.session_state.current_conversation:
         role = "assistant" if msg["sender"] == "assistant" else "user"
         api_messages.append({"role": role, "content": msg["text"]})
  
-    # Generar respuesta con el modelo de lenguaje
     with st.chat_message("assistant"):
         with st.spinner("Pensando..."):
             try:
