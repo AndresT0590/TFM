@@ -138,32 +138,32 @@ st.markdown(
     }
 
     /* Mejoras responsivas */
-    @media screen and (max-width: 768px) {
-    body {
-        color: #FFFFFF !important;
+@media screen and (max-width: 768px) {
+    body, h1, h2, h3, h4, h5, h6, p, span, div {
+        color: #FFFFFF !important; /* Forzamos el color blanco en todos los textos */
     }
 
     section[data-testid="stSidebar"] {
         width: 100% !important;
         padding: 10px;
     }
-    }
+}
 
-    /* Scroll bar personalizada */
-    ::-webkit-scrollbar {
+/* Scroll bar personalizada */
+::-webkit-scrollbar {
     width: 10px;
-    }
+}
 
-    ::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
     background: #1A1924;
-    }
+}
 
-    ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
     background: #533E2D;
     border-radius: 5px;
-    }
+}
 
-    ::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
     background: #A27035;
     </style>
     """,
