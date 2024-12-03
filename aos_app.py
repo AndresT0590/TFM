@@ -139,33 +139,37 @@ st.markdown(
 
     /* Mejoras responsivas */
     @media screen and (max-width: 768px) {
-        section[data-testid="stSidebar"] {
-            width: 100% !important;
-            padding: 10px;
-        }
+    body {
+        color: #FFFFFF !important;
+    }
+
+    section[data-testid="stSidebar"] {
+        width: 100% !important;
+        padding: 10px;
+    }
     }
 
     /* Scroll bar personalizada */
     ::-webkit-scrollbar {
-        width: 10px;
+    width: 10px;
     }
 
     ::-webkit-scrollbar-track {
-        background: #1A1924;
+    background: #1A1924;
     }
 
     ::-webkit-scrollbar-thumb {
-        background: #533E2D;
-        border-radius: 5px;
+    background: #533E2D;
+    border-radius: 5px;
     }
 
     ::-webkit-scrollbar-thumb:hover {
-        background: #A27035;
-    }
+    background: #A27035;
     </style>
     """,
     unsafe_allow_html=True
 )
+
 # MODIFICACIÓN PRINCIPAL: Obtener API KEY desde Streamlit Secrets
 api_key = st.secrets["OPENAI_API_KEY"]
 
