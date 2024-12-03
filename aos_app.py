@@ -139,7 +139,7 @@ st.markdown(
 
     /* Mejoras responsivas */
 @media screen and (max-width: 768px) {
-    body, h1, h2, h3, h4, h5, h6, p, span, div {
+    body, h2, h3, h4, h5, h6, p, span, div {
         color: #FFFFFF !important; /* Forzamos el color blanco en todos los textos */
     }
 
