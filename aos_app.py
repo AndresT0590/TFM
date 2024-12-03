@@ -18,12 +18,154 @@ st.set_page_config(page_title="AOS - Asistente Virtual para Obras de Suelos", pa
 st.markdown(
     """
     <style>
-    /* Todos los estilos CSS que tenías originalmente */
+    /* Fuente y configuración global */
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+    html, body {
+    background-color: #1A1924; /* Raisin Black */
+    color: white;
+    padding: 0 !important;
+    height: 100% !important;
+    width: 100% !important;
+    font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    }
+
+    /* Contenedor principal de Streamlit */
+    [data-testid="stAppViewContainer"] {
+    background-color: #1A1924 !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 100vh !important;
+    }
+
+    /* Estilos para el encabezado */
+    header {
+    background-color: #1A1924 !important;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    }
+
+    h1 {
+        color: #F0E68C; /* Beige claro para que combine con el esquema */
+        text-align: center;
+        font-size: 30px;
+    }
+
+    stBottom{
+    position: sticky;
+    background-color: #1A1924 !important;
+    left: 0px;
+    bottom: 0px;
+    width: 100%;
+    }
+
+    .st-emotion-cache-hzygls {
+    position: relative;
+    bottom: 0px;
+    width: 100%;
+    min-width: 100%;
+    background-color: #1A1924;
+    display: flex;
+    flex-direction: column;
+    -webkit-box-align: center;
+    align-items: center;
+    }
+    
+    /* Sidebar diferenciado */
+    section[data-testid="stSidebar"] {
+        background-color: #533E2D !important;
+        color: #FFFFFF !important;
+        transition: all 0.3s ease;
+        padding: 20px;
+        box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+        position: relative;
+    }
+
+    /* Texto en el sidebar */
+    section[data-testid="stSidebar"] h1, 
+    section[data-testid="stSidebar"] h2, 
+    section[data-testid="stSidebar"] h3, 
+    section[data-testid="stSidebar"] p {
+        color: #FFFFFF !important;
+        font-weight: 300;
+    }
+
+    /* Ajustes para el botón */
+    .stButton button {
+        background-color: #A27035 !important;
+        color: #1A1924 !important;
+        border: none !important;
+        border-radius: 5px !important;
+        padding: 10px 20px;
+        font-size: 16px !important;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        font-family: 'Roboto', sans-serif;
+        letter-spacing: 1px;
+        display: block; /* Para asegurarse de que tome todo el ancho disponible */
+        margin: 0 auto; /* Centra horizontalmente */
+    }
+
+    .stButton button:hover {
+        background-color: #533E2D !important;
+        color: #FFFFFF !important;
+        box-shadow: 0 6px 8px rgba(0,0,0,0.2);
+        transform: translateY(-2px);
+    }
+
+    /* Ajustar la barra de entrada */
+    input[type="text"] {
+    background-color: #FFFFFF !important;
+    border: 2px solid #A27035 !important;
+    color: #1A1924 !important;
+    border-radius: 8px !important;
+    padding: 12px 16px;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    }
+
+    input[type="text"]:focus {
+    outline: none !important;
+    border-color: #533E2D !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Mejoras responsivas */
+    @media screen and (max-width: 768px) {
+        section[data-testid="stSidebar"] {
+            width: 100% !important;
+            padding: 10px;
+        }
+    }
+
+    /* Scroll bar personalizada */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #1A1924;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #533E2D;
+        border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #A27035;
+    }
     </style>
     """,
     unsafe_allow_html=True
 )
-
 # MODIFICACIÓN PRINCIPAL: Obtener API KEY desde Streamlit Secrets
 api_key = st.secrets["OPENAI_API_KEY"]
 
