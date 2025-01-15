@@ -48,14 +48,14 @@ st.markdown(
     
     
 
-section[data-testid="stSidebar"] {
-    background-image: url("sidebar.jpg");
-    background-size: cover; /* Ajusta la imagen para que cubra el área */
-    background-repeat: no-repeat; /* Evita que la imagen se repita */
-    background-position: center; /* Centra la imagen */
-    background-color: rgba(83, 62, 45, 0.8); /* Color de fondo con opacidad para complementar */
-    color: #FFFFFF !important; /* Color del texto */
-}
+    section[data-testid="stSidebar"] {
+        background-image: url("sidebar.jpg");
+        background-size: cover; /* Ajusta la imagen para que cubra el área */
+        background-repeat: no-repeat; /* Evita que la imagen se repita */
+        background-position: center; /* Centra la imagen */
+        background-color: rgba(83, 62, 45, 0.8); /* Color de fondo con opacidad para complementar */
+        color: #FFFFFF !important; /* Color del texto */
+    }
 
     .stButton button {
         background-color: #A27035 !important;
