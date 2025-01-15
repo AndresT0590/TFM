@@ -12,7 +12,7 @@ from langchain.prompts import PromptTemplate
 from PIL import Image
 
 # Configuración de la página
-st.set_page_config(page_title="Merlin's Floors", page_icon="favicon_io/favicon-16x16.png")
+st.set_page_config(page_title="Merlin's Floors", page_icon="./favicon-16x16.png")
 
 # Inicializar el estado de sesión
 if 'accepted' not in st.session_state:
@@ -151,7 +151,7 @@ st.markdown(
         }
 
         .st-emotion-cache-4oy321 {
-            width: 42vw
+            width: 40vw
         }    
               
         
@@ -311,7 +311,7 @@ client = OpenAI(api_key=api_key)
 llm = ChatOpenAI(model="gpt-4", openai_api_key=api_key)
 
 # Cargar y preparar datos
-data_path = "data/BD_Final.csv"  
+data_path = "./BD_Final.csv"  
 df = pd.read_csv(data_path,delimiter='\t')
 df['Contenido'] = df.iloc[:, 1:].apply(lambda row: " ".join(row.astype(str)), axis=1)
 
@@ -463,7 +463,7 @@ with st.sidebar:
                 st.markdown("No hay conversaciones guardadas.")
 
             with st.container():
-                image = Image.open("favicon_io/android-chrome-512x512.png")
+                image = Image.open("./android-chrome-512x512.png")
     
                 st.image(image, width=150)
 
