@@ -49,7 +49,7 @@ st.markdown(
     
 
 section[data-testid="stSidebar"] {
-    background-image: url("./sidebar.jpg");
+    background-image: url("sidebar.jpg");
     background-size: cover; /* Ajusta la imagen para que cubra el área */
     background-repeat: no-repeat; /* Evita que la imagen se repita */
     background-position: center; /* Centra la imagen */
