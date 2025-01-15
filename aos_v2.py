@@ -151,7 +151,7 @@ st.markdown(
         }
 
         .st-emotion-cache-4oy321 {
-            width: 40vw
+            width: 37vw
         }    
               
         
