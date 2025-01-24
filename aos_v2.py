@@ -293,7 +293,7 @@ def accept_terms():
     st.session_state.accepted = True
     st.session_state.current_conversation.append({
         "sender": "assistant",
-        "text": "¡Gracias por aceptar los términos y condiciones! ¿En qué puedo ayudarte con tu proyecto de remodelación de suelos?"
+        "text": "¡Bienvenidos! Me alegro de que hayáis aceptado los términos. ¿En qué puedo ayudaros con la reforma de vuestro suelo?"
     })
     st.rerun()
     
@@ -496,45 +496,40 @@ if st.session_state.accepted == 'terminos':
     
     
     st.markdown("""
-        <div class="terms-container">
-        <h1>Términos y Condiciones del Servicio de Chatbot</h1>
-        <div class="section">
-            <h2>1. Introducción</h2>
-            <h3>1.1. Objeto</h3>
-            <p>El presente documento establece los términos y condiciones generales (en adelante, las "Condiciones") que regulan el acceso y uso del servicio de chatbot (en adelante, el "Servicio") proporcionado por Equipo Estudiantil del Máster Universitario en Visual Analytics and Big Data de la Universidad Unir de Colombia (en adelante, el "Proveedor"), basado en la tecnología de modelos de lenguaje grandes (LLM) e integrado con la API de OpenAI.</p>
-            <h3>1.2. Aceptación</h3>
-            <p>Al utilizar el Servicio, el usuario (en adelante, el "Usuario") acepta íntegramente y sin reservas estas Condiciones. Si el Usuario no está de acuerdo con alguna de estas Condiciones, deberá abstenerse de utilizar el Servicio.</p>
-        </div>
-        <div class="section">
-            <h2>2. Descripción del Servicio</h2>
-            <h3>2.1. Funcionalidades</h3>
-            <p>El Servicio permite al Usuario mantener conversaciones con un chatbot impulsado por inteligencia artificial. El chatbot está diseñado para proporcionar información, responder preguntas y realizar tareas de manera automatizada.</p>
-            <h3>2.2. Limitaciones</h3>
-            <p>El Usuario reconoce que el Servicio es una herramienta de asistencia dentro ámbito de un proyecto educativo y que no debe ser utilizado para fines críticos o fuera de los lineamientos preestablecidos por la Universidad. El Proveedor no garantiza la precisión, exhaustividad o fiabilidad de la información proporcionada por el chatbot.</p>
-        </div>
-        <div class="section">
-            <h2>3. Uso del Servicio</h2>
-            <h3>3.1. Registro</h3>
-            <p>Para utilizar el Servicio, el Usuario podrá usar el chatbot sin ninguna limitación dado que es un proyecto estudiantil y no requiere procesos de registro por uso y no será necesario el registro del Usuario para el uso del chatbot.</p>
-            <h3>3.2. Uso lícito</h3>
-            <p>El Usuario se compromete a utilizar el Servicio de forma lícita y conforme a las presentes Condiciones y a la legislación vigente colombiana en aras de cumplir con la legalidad y las normas de ley establecidas por leyes de derechos de autor y consecuentemente las leyes colombianas vigentes. Queda prohibido cualquier uso que pueda ser considerado ilegal, dañino, ofensivo, difamatorio, obsceno, amenazante o que infrinja los derechos de terceros.</p>
-            <h3>3.3. Datos personales</h3>
-            <p>El tratamiento de los datos personales del Usuario se regirá por la política de privacidad del Proveedor que la información será manejada únicamente por este equipo técnico y los entes de control interno ósea la Universidad y que el chatbot y las bases de datos será manejadas este mismo equipo técnico.</p>
-        </div>
-        <div class="section">
-            <h2>8. Contacto</h2>
-            <h3>8.1. Atención al cliente</h3>
-            <div class="contact-info">
-                <p>Para cualquier consulta o reclamación, el Usuario puede ponerse en contacto con el Proveedor a través de:</p>
-                <p>
-                    <a href="mailto:mariafernanda.hernandez741@comunidadunir.net">mariafernanda.hernandez741@comunidadunir.net</a><br>
-                    <a href="mailto:wendyvanessa.castillo102@comunidadunir.net">wendyvanessa.castillo102@comunidadunir.net</a><br>
-                    <a href="mailto:andresfelipe.tovar735@comunidadunir.net">andresfelipe.tovar735@comunidadunir.net</a>
-                </p>
-            </div>
-        </div>
-    </div>
-                """, unsafe_allow_html=True)
+   <div class="terms-container">
+   <h1>Términos y Condiciones del Servicio</h1>
+   <div class="section">
+       <h2>1. Introducción</h2>
+       <h3>1.1. Objetivo</h3>
+       <p>Este documento establece las condiciones generales que regulan el uso del asistente virtual de Merlin's Floors (en adelante, el "Servicio"), desarrollado por nuestro equipo técnico mediante tecnología de inteligencia artificial.</p>
+       <h3>1.2. Aceptación</h3>
+       <p>Al usar el Servicio, aceptáis estas condiciones en su totalidad. Si no estáis de acuerdo con alguna de ellas, os rogamos que no utilicéis el Servicio.</p>
+   </div>
+   <div class="section">
+       <h2>2. Descripción del Servicio</h2>
+       <h3>2.1. Funcionalidades</h3>
+       <p>El Servicio os permite mantener conversaciones con nuestro asistente virtual especializado en pavimentos y reformas. Está diseñado para asesoraros y resolver vuestras dudas sobre materiales, instalación y presupuestos.</p>
+       <h3>2.2. Limitaciones</h3>
+       <p>Debéis tener en cuenta que este es un servicio de asesoramiento orientativo. Las recomendaciones y presupuestos son aproximados y pueden variar según la zona y el momento.</p>
+   </div>
+   <div class="section">
+       <h2>3. Uso del Servicio</h2>
+       <h3>3.1. Acceso</h3>
+       <p>Podéis utilizar el servicio libremente sin necesidad de registro previo.</p>
+       <h3>3.2. Uso adecuado</h3>
+       <p>Os comprometéis a usar el Servicio de forma adecuada, respetando la legalidad vigente y los derechos de terceros.</p>
+       <h3>3.3. Privacidad</h3>
+       <p>Vuestros datos serán tratados conforme a nuestra política de privacidad, siendo gestionados exclusivamente por nuestro equipo técnico.</p>
+   </div>
+   <div class="section">
+       <h2>4. Contacto</h2>
+       <div class="contact-info">
+           <p>Para cualquier consulta, podéis contactar con nosotros en:</p>
+           <p>[Tus datos de contacto aquí]</p>
+       </div>
+   </div>
+</div>
+""", unsafe_allow_html=True)
     with st.container():
         if st.button("Aceptar"):
             accept_terms()
