@@ -47,7 +47,7 @@ st.markdown(
     }
     
     section[data-testid="stSidebar"] {
-    background-image: url('./ruta-de-tu-imagen.jpg') !important;
+    background-image: url('sidebar.jpg') !important;
     background-size: cover !important;
     background-position: center !important;
     background-color: transparent !important;
