@@ -26,7 +26,7 @@ if "active_conversation_index" not in st.session_state:
 
 # Estilos CSS personalizados
 st.markdown(
-    """
+ """
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
 
@@ -46,12 +46,11 @@ st.markdown(
         font-size: 30px;
     }
     
+    
+
     section[data-testid="stSidebar"] {
-    background-image: url('sidebar.jpg') !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-color: transparent !important;
-}
+        background-color: #533E2D !important;
+        color: #FFFFFF !important;
     }
 
     .stButton button {
@@ -279,6 +278,8 @@ st.markdown(
        
        
        
+       
+        
        
         
         
@@ -525,7 +526,9 @@ if st.session_state.accepted == 'terminos':
        <h2>4. Contacto</h2>
        <div class="contact-info">
            <p>Para cualquier consulta, podéis contactar con nosotros en:</p>
-           <p>[Tus datos de contacto aquí]</p>
+                    <a href="mailto:mariafernanda.hernandez741@comunidadunir.net">mariafernanda.hernandez741@comunidadunir.net</a><br>
+                    <a href="mailto:wendyvanessa.castillo102@comunidadunir.net">wendyvanessa.castillo102@comunidadunir.net</a><br>
+                    <a href="mailto:andresfelipe.tovar735@comunidadunir.net">andresfelipe.tovar735@comunidadunir.net</a>
        </div>
    </div>
 </div>
