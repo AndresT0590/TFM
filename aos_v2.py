@@ -90,26 +90,6 @@ st.markdown("""
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
-    .terms-container h2 {
-        color: #ffd700;
-        margin-top: 2rem;
-        font-size: 1.5rem;
-    }
-
-    .suggested-questions {
-        position: fixed;
-        right: 10px;
-        top: 46%;
-        transform: translateY(-50%);
-        width: 180px;
-        background-color: rgba(89, 67, 48, 0.95);
-        border-radius: 6px;
-        padding: 10px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        z-index: 1000;
-        margin-right: 6px;
-    }
-
     .materials-table {
         width: 100%;
         border-collapse: collapse;
@@ -142,8 +122,82 @@ st.markdown("""
         overflow-x: auto;
     }
 
+    .suggested-questions {
+        position: fixed;
+        right: 10px;
+        top: 46%;
+        transform: translateY(-50%);
+        width: 180px;
+        background-color: rgba(89, 67, 48, 0.95);
+        border-radius: 6px;
+        padding: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        margin-right: 6px;
+    }
+
+    .questions-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .question-text {
+        width: 100%;
+        background-color: rgba(255, 215, 0, 0.1);
+        border: 1px solid rgba(255, 215, 0, 0.3);
+        color: #e5e5e5;
+        padding: 6px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+    }
     </style>
     """, unsafe_allow_html=True)
+
+def process_table_response(response_text):
+    """Procesa la respuesta para convertir las tablas de markdown a HTML"""
+    if "```" not in response_text:
+        return response_text
+
+    parts = response_text.split("```")
+    result = parts[0]  # Texto antes de la tabla
+
+    for i in range(1, len(parts), 2):
+        if i < len(parts):
+            table_content = parts[i].strip()
+            if "|" in table_content:  # Si contiene una tabla
+                # Convertir la tabla Markdown a HTML
+                html_table = '<div class="table-container"><table class="materials-table">'
+                rows = [row.strip() for row in table_content.split('\n') if row.strip() and '|' in row]
+                
+                # Procesar encabezados
+                if rows:
+                    headers = [header.strip() for header in rows[0].split('|')[1:-1]]
+                    html_table += '<thead><tr>'
+                    for header in headers:
+                        html_table += f'<th>{header.strip()}</th>'
+                    html_table += '</tr></thead>'
+                
+                # Procesar datos
+                if len(rows) > 2:
+                    html_table += '<tbody>'
+                    for row in rows[2:]:
+                        cells = [cell.strip() for cell in row.split('|')[1:-1]]
+                        html_table += '<tr>'
+                        for cell in cells:
+                            html_table += f'<td>{cell}</td>'
+                        html_table += '</tr>'
+                    html_table += '</tbody>'
+                
+                html_table += '</table></div>'
+                result += html_table
+            else:
+                result += parts[i]
+            
+            if i + 1 < len(parts):
+                result += parts[i + 1]
+
+    return result
 
 def accept_terms():
     st.session_state.accepted = True
@@ -160,52 +214,6 @@ def read_terms():
 def rechazar_terminos():
     st.session_state.accepted = False
     st.rerun()
-
-def process_table_response(response_text):
-    """
-    Procesa la respuesta para convertir las tablas de markdown a HTML con estilos
-    """
-    if "```" in response_text:
-        parts = response_text.split("```")
-        result = parts[0]  # Texto antes de la tabla
-        
-        # Procesar cada sección de código/tabla
-        for i in range(1, len(parts), 2):
-            if i < len(parts):
-                table_content = parts[i].strip()
-                if "| Material |" in table_content:
-                    # Convertir la tabla Markdown a HTML
-                    html_table = '<div class="table-container"><table class="materials-table">'
-                    
-                    # Procesar las filas
-                    rows = [row.strip() for row in table_content.split('\n') if row.strip() and '|' in row]
-                    
-                    # Procesar encabezados
-                    headers = [header.strip() for header in rows[0].split('|')[1:-1]]
-                    html_table += '<thead><tr>'
-                    for header in headers:
-                        html_table += f'<th>{header.strip()}</th>'
-                    html_table += '</tr></thead>'
-                    
-                    # Procesar datos
-                    html_table += '<tbody>'
-                    for row in rows[2:]:  # Skip the header separator row
-                        cells = [cell.strip() for cell in row.split('|')[1:-1]]
-                        html_table += '<tr>'
-                        for cell in cells:
-                            html_table += f'<td>{cell}</td>'
-                        html_table += '</tr>'
-                    
-                    html_table += '</tbody></table></div>'
-                    result += html_table
-                else:
-                    result += parts[i]
-                
-                if i + 1 < len(parts):
-                    result += parts[i + 1]
-        
-        return result
-    return response_text
 
 api_key = st.secrets["OPENAI_API_KEY"]
 
@@ -241,6 +249,17 @@ prompt_template = PromptTemplate(
 "- ¿Qué tipo de estancia estamos valorando? (cocina, baño, salón...)\n"
 "- ¿Qué necesitáis específicamente?\n"
 "- ¿Tenéis restricciones de presupuesto o preferencias?\n"
+
+"INSTRUCCIÓN CRÍTICA: Cada vez que identifiques una estancia (cocina, baño, salón, etc.) en la pregunta del usuario, "
+"DEBES OBLIGATORIAMENTE responder primero con una tabla de materiales recomendados usando EXACTAMENTE este formato:\n\n"
+"```\n"
+"| Material | Marca | Precio/m² | Características | Mantenimiento |\n"
+"| -------- | ----- | --------- | --------------- | ------------- |\n"
+"| Porcelánico | Porcelanosa | 40-60€ | Alta resistencia, impermeable | Limpieza simple |\n"
+"| Gres | Roca | 30-45€ | Buena resistencia, antideslizante | Limpieza regular |\n"
+"| Vinílico | Tarkett | 25-35€ | Resistente al agua, económico | Fácil mantenimiento |\n"
+"```\n"
+"DESPUÉS de la tabla, continúa con:\n\n"
 "2. EVALUACIÓN DE NECESIDADES:\n"
 "- Nivel de tránsito en la zona\n"
 "- Exposición a humedad o condiciones especiales\n"
@@ -252,18 +271,8 @@ prompt_template = PromptTemplate(
 "4. ANÁLISIS DE PRESUPUESTO:\n"
 "- Tarifa del material por metro cuadrado\n"
 "- Mano de obra estimada\n"
-"- Extras (preparación, materiales adicionales)\n"
-"5. FORMULACIÓN DE RESPUESTA:\n"
-"- Empezar con la recomendación principal\n"
-"- Justificar cada sugerencia\n"
-"- Incluir alternativas si procede\n\n"
-"IMPORTANTE: Cuando el usuario mencione una estancia específica (cocina, baño, salón, etc.), "
-"DEBES presentar la información en formato tabla como se muestra a continuación:\n\n"
-"```\n"
-"| Material | Marca | Precio/m² | Características | Mantenimiento |\n"
-"| -------- | ----- | --------- | --------------- | ------------- |\n"
-"| [Material1] | [Marca1] | [Precio1] | [Características1] | [Mantenimiento1] |\n"
-"```\n\n"
+"- Extras (preparación, materiales adicionales)\n\n"
+
 "FUNCIÓN DE BÚSQUEDA:\n"
 "Si el cliente solicita 'VER MATERIALES', mostrar:\n"
 "'De acuerdo a nuestra base de datos, os detallo todos los pavimentos disponibles:\n"
@@ -283,48 +292,16 @@ prompt_template = PromptTemplate(
 "* Características: exclusividad, durabilidad\n"
 "5. CEMENTO Y HORMIGÓN:\n"
 "* Características: resistencia, estilo industrial\n"
-"¿Queréis información detallada de algún material específico?'\n\n"
-"\nPautas de comunicación:\n"
-"- Explica siempre el PORQUÉ de tus recomendaciones\n"
-"- Divide los tipos de pavimento por categorías claras:\n"
-"* Cerámicos (porcelánico, gres...)\n"
-"* Madera (tarima, parquet...)\n"
-"* Vinílicos y laminados\n"
-"* Piedra natural (mármol, pizarra...)\n"
-"* Cemento y hormigón\n"
-"- Para cada recomendación, menciona:\n"
-"* Ventajas específicas del material\n"
-"* Desventajas o limitaciones\n"
-"* Rango de tarifas actual en España\n"
-"* Mantenimiento necesario\n"
-"- Si preguntan por precios:\n"
-"* Da siempre un rango (mínimo - máximo)\n"
-"* Especifica si incluye o no IVA\n"
-"* Menciona factores que pueden variar el presupuesto\n\n"
-"REGLAS IMPORTANTES:\n"
-"1. Si no estás seguro de un dato específico, indícalo\n"
-"2. Cuando hables de tarifas, especifica que son orientativas\n"
-"3. Si mencionan una zona de España, adapta tus recomendaciones al clima local\n"
-"4. Corrige amablemente si confunden términos técnicos\n"
-"5. NO respondas a preguntas sobre paredes, techos u otros elementos que no sean pavimentos\n\n"
-"Ejemplo de respuesta estructurada:\n"
-"'Vale, vamos a analizar vuestra consulta:\n"
-"1. Estancia: Cocina de alto tránsito\n"
-"2. Necesidades: Resistencia a manchas y durabilidad\n"
-"```\n"
-"| Material | Marca | Precio/m² | Características | Mantenimiento |\n"
-"| Porcelánico | Porcelanosa | 40-60€ | Alta resistencia, impermeable | Limpieza simple |\n"
-"| Gres | Roca | 30-45€ | Buena resistencia, antideslizante | Limpieza regular |\n"
-"```\n"
-"3. Os recomiendo porcelánico rectificado porque:\n"
-"- Es el más resistente a manchas y humedad\n"
-"- Tiene una durabilidad superior a 20 años\n"
-"- Tarifa actual: 30-60€/m² (material)\n"
-"- Mano de obra: 20-35€/m² adicionales'\n\n"
-"Si la pregunta NO es sobre suelos, responde:\n"
-"'Disculpad, pero mi especialidad son exclusivamente los pavimentos. Para aseguraros la mejor asesoría, ¿tenéis alguna consulta específica sobre tipos de suelos, instalación o presupuestos?'\n\n"
+
+"RECUERDA: SIEMPRE que se mencione una estancia, DEBES empezar tu respuesta con la tabla de materiales recomendados.\n\n"
+
 "Historial de la conversación: {history}\n\n"
-"Información relevante del contexto: {context}\
+"Información relevante del contexto: {context}\n\n"
+"Pregunta actual: {question}\n\n"
+"Respuesta:"
+    )
+)
+
 qa_chain = RetrievalQA.from_chain_type(
     llm=llm,
     retriever=retriever,
@@ -372,38 +349,33 @@ def load_conversation(index):
 
 # Sidebar
 with st.sidebar:
-    
-    
-    
-    
+    st.title("Historial de conversaciones")
+    st.markdown("---")
     with st.container():
-        st.title("Historial de conversaciones")
-        st.markdown("---")
         with st.container():
-            
-            with st.container():
-                if st.button("Nueva Conversación"):
-                    start_new_conversation()
-                st.markdown("### Conversaciones Guardadas")
-            if st.session_state.conversations:
-                for i, conv in enumerate(st.session_state.conversations):
-                    if st.button(conv["name"], key=f"load_{i}"):
-                        load_conversation(i)
-            else:
-                st.markdown("No hay conversaciones guardadas.")
+            if st.button("Nueva Conversación"):
+                start_new_conversation()
+            st.markdown("### Conversaciones Guardadas")
+        if st.session_state.conversations:
+            for i, conv in enumerate(st.session_state.conversations):
+                if st.button(conv["name"], key=f"load_{i}"):
+                    load_conversation(i)
+        else:
+            st.markdown
+            # Continuación del código anterior...
 
-            with st.container():
-                image = Image.open("./android-chrome-512x512.png")
-    
-                st.image(image, width=150)
+        else:
+            st.markdown("No hay conversaciones guardadas.")
+
+        with st.container():
+            image = Image.open("./android-chrome-512x512.png")
+            st.image(image, width=150)
 
 # Contenido principal
 st.title("Merlin's Floors")
 
 # Mostrar mensaje de bienvenida y términos si no han sido aceptados
 if st.session_state.accepted == 'terminos':
-    
-    
     st.markdown("""
    <div class="terms-container">
    <h1>Términos y Condiciones del Servicio</h1>
@@ -440,11 +412,10 @@ if st.session_state.accepted == 'terminos':
        </div>
    </div>
 </div>
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
     with st.container():
         if st.button("Aceptar"):
             accept_terms()
-                
         if st.button("Rechazar"):
             rechazar_terminos()
              
@@ -453,7 +424,7 @@ elif not st.session_state.accepted:
         <div class="welcome-message">
             <h2>¡Bienvenido a Merlin's Floors!</h2>
             <p>Tu asistente experto en hacer realidad tus sueños de remodelación. Estamos aquí para echarte una mano con todo lo relacionado con suelos, desde consejos hasta presupuestos aproximados.</p>
-            <p><strong>Este proyecto es de carácter académico. La información proporcionada es orientativa, por lo que podéis estar tranquilos, no será almacenada..</strong> </p>
+            <p><strong>Este proyecto es de carácter académico. La información proporcionada es orientativa, por lo que podéis estar tranquilos, no será almacenada.</strong> </p>
             <p>Para continuar, por favor acepta nuestros términos y condiciones.</p>
         </div>
     """, unsafe_allow_html=True)
@@ -467,11 +438,8 @@ elif not st.session_state.accepted:
                 read_terms()
     
 else:
-
-        
     st.markdown("""
-                
-   <div class="suggested-questions">
+    <div class="suggested-questions">
         <h2>Preguntas Sugeridas</h2>
         <div class="questions-list">
             <div>
@@ -491,18 +459,12 @@ else:
             </div>
         </div>
     </div>
-                
-                
-                
-                """,unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
     
     # Mostrar historial de mensajes
     for message in st.session_state.current_conversation:
         with st.chat_message(message["sender"]):
-            st.markdown(message["text"])
-            
-    
-    
+            st.markdown(message["text"], unsafe_allow_html=True)
 
     # Entrada del usuario
     if user_input := st.chat_input("Escribe tu consulta aquí..."):
@@ -532,18 +494,20 @@ else:
             api_messages.append({"role": role, "content": msg["text"]})
 
         with st.chat_message("assistant"):
-            
             with st.spinner("Procesando..."):
                 try:
                     response = client.chat.completions.create(
                         model="gpt-4",
                         messages=api_messages,
-                        max_tokens=500,
+                        max_tokens=1000,
                         temperature=0.7,
                     )
                     ai_response = response.choices[0].message.content.strip()
-                    st.markdown(ai_response)
-                    st.session_state.current_conversation.append({"sender": "assistant", "text": ai_response})
+                    processed_response = process_table_response(ai_response)
+                    st.markdown(processed_response, unsafe_allow_html=True)
+                    st.session_state.current_conversation.append({
+                        "sender": "assistant",
+                        "text": processed_response
+                    })
                 except Exception as e:
                     st.error(f"Error al procesar tu solicitud: {e}")
-
