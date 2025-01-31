@@ -242,50 +242,43 @@ def create_vectorstore(dataframe):
 vectorstore = create_vectorstore(df)
 retriever = vectorstore.as_retriever()
 
-# Template del prompt actualizado
 prompt_template = PromptTemplate(
     input_variables=["context", "history", "question"],
     template=(
-        "Eres un experto asesor en pavimentos con más de 15 años de experiencia en España. "
-        "IMPORTANTE: Sigue estas instrucciones AL PIE DE LA LETRA:\n\n"
-        "1. CUANDO el usuario mencione CUALQUIER estancia (cocina, baño, salón...), "
-        "tu respuesta DEBE COMENZAR CON LA SIGUIENTE TABLA:\n\n"
+        "[INSTRUCCIÓN PRINCIPAL] Al detectar una estancia (cocina, baño, salón, dormitorio, etc.), DEBES GENERAR UNA TABLA como la del ejemplo. "
+        "NO CONTINÚES con ninguna otra respuesta hasta haber generado la tabla.\n\n"
+        "FORMATO DE TABLA OBLIGATORIO:\n"
         "```\n"
         "| Material | Marca | Precio/m² | Características | Mantenimiento |\n"
         "| -------- | ----- | --------- | --------------- | ------------- |\n"
-        "| [nombre del material] | [marca] | [precio] | [características principales] | [tipo de mantenimiento] |\n"
+        "| Porcelánico | Porcelanosa | 40-60€ | Alta resistencia | Limpieza diaria |\n"
+        "| Gres | Roca | 30-45€ | Antideslizante | Semanal |\n"
+        "| Vinílico | Tarkett | 25-35€ | Impermeable | Mensual |\n"
         "```\n\n"
-        "2. DESPUÉS de la tabla, SIEMPRE analiza:\n"
-        "   - Nivel de tránsito\n"
-        "   - Exposición a humedad/condiciones especiales\n"
-        "   - Mantenimiento requerido\n"
-        "   - Presupuesto aproximado\n\n"
-        "3. ESTANCIAS que requieren tabla:\n"
-        "   - Cocina\n"
-        "   - Baño\n"
-        "   - Salón\n"
-        "   - Dormitorio\n"
-        "   - Terraza\n"
-        "   - Cualquier otra estancia mencionada\n\n"
-        "4. La tabla DEBE incluir AL MENOS 3 opciones de materiales.\n\n"
-        "5. ESTRUCTURA DE RESPUESTA:\n"
-        "   a) PRIMERO: Tabla de materiales\n"
-        "   b) SEGUNDO: Análisis y recomendaciones\n"
-        "   c) TERCERO: Consejos de instalación\n\n"
-        "EJEMPLOS DE RESPUESTA CORRECTA:\n\n"
-        "Si preguntan por cocina:\n"
-        "'Para una cocina, estas son las mejores opciones:\n\n"
-        "```\n"
-        "| Material | Marca | Precio/m² | Características | Mantenimiento |\n"
-        "| Porcelánico | Porcelanosa | 40-60€ | Alta resistencia, impermeable | Limpieza simple |\n"
-        "| Gres | Roca | 30-45€ | Buena resistencia, antideslizante | Limpieza regular |\n"
-        "| Vinílico | Tarkett | 25-35€ | Resistente al agua, económico | Fácil mantenimiento |\n"
-        "```\n\n"
-        "Análisis de necesidades...'\n\n"
+        "FLUJO DE RESPUESTA OBLIGATORIO:\n"
+        "1. Identifica si se menciona una estancia\n"
+        "2. Si se menciona una estancia, PRIMERO muestra la tabla\n"
+        "3. DESPUÉS de la tabla, continúa con el análisis\n\n"
+        "PALABRAS CLAVE QUE REQUIEREN TABLA:\n"
+        "- cocina\n"
+        "- baño\n"
+        "- salón\n"
+        "- dormitorio\n"
+        "- habitación\n"
+        "- terraza\n\n"
+        "IMPORTANTE: Si identificas cualquiera de estas palabras clave en la pregunta del usuario, DEBES empezar tu respuesta con la tabla.\n\n"
+        "Después de la tabla, puedes continuar con el siguiente proceso de pensamiento:\n"
+        "1. ANÁLISIS INICIAL:\n"
+        "- ¿Qué tipo de estancia estamos valorando?\n"
+        "- ¿Qué necesitáis específicamente?\n"
+        "- ¿Tenéis restricciones de presupuesto o preferencias?\n"
+        "2. EVALUACIÓN DE NECESIDADES\n"
+        "3. SELECCIÓN DE OPCIONES\n"
+        "4. ANÁLISIS DE PRESUPUESTO\n\n"
         "Información del contexto: {context}\n"
-        "Historial: {history}\n"
+        "Historial de la conversación: {history}\n"
         "Pregunta actual: {question}\n\n"
-        "Respuesta:"
+        "Respuesta (RECUERDA: SI SE MENCIONA UNA ESTANCIA, EMPIEZA CON LA TABLA):"
     )
 )
 
@@ -484,10 +477,12 @@ else:
             with st.spinner("Procesando..."):
                 try:
                     response = client.chat.completions.create(
-                        model="gpt-4",
-                        messages=api_messages,
-                        max_tokens=1000,
-                        temperature=0.7,
+                    model="gpt-4",
+                    messages=api_messages,
+                    max_tokens=2000,  # Aumentado de 1000 a 2000
+                    temperature=0.7,
+                    presence_penalty=0.6,  # Añadido para fomentar respuestas más creativas
+                     frequency_penalty=0.3, # Añadido para evitar repeticiones
                     )
                     ai_response = response.choices[0].message.content.strip()
                     processed_response = process_table_response(ai_response)
