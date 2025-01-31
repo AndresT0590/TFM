@@ -25,8 +25,7 @@ if "active_conversation_index" not in st.session_state:
     st.session_state.active_conversation_index = None
 
 # Estilos CSS personalizados
-st.markdown(
- """
+st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
 
@@ -45,8 +44,6 @@ st.markdown(
         text-align: center;
         font-size: 30px;
     }
-    
-    
 
     section[data-testid="stSidebar"] {
         background-color: #533E2D !important;
@@ -83,206 +80,70 @@ st.markdown(
         color: white;
         margin-bottom: 10px;
     }
-    
-        
+
     .terms-container {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background-color: rgba(89, 67, 48, 0.9);
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background-color: rgba(89, 67, 48, 0.9);
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
 
-        h2 {
-            color: #ffd700;
-            margin-top: 2rem;
-            font-size: 1.5rem;
-        }
-        h3 {
-            color: #ffd700;
-            margin-top: 1.5rem;
-            font-size: 1.2rem;
-        }
+    .terms-container h2 {
+        color: #ffd700;
+        margin-top: 2rem;
+        font-size: 1.5rem;
+    }
 
-        p, ul, ol {
-            margin-bottom: 1rem;
-            color: white;
-        }
+    .suggested-questions {
+        position: fixed;
+        right: 10px;
+        top: 46%;
+        transform: translateY(-50%);
+        width: 180px;
+        background-color: rgba(89, 67, 48, 0.95);
+        border-radius: 6px;
+        padding: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        margin-right: 6px;
+    }
 
-        .section {
-            margin-bottom: 2rem;
-        }
+    .materials-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+        background-color: rgba(89, 67, 48, 0.9);
+        border-radius: 8px;
+        overflow: hidden;
+    }
 
-        .contact-info {
-            background-color: rgba(255, 215, 0, 0.1);
-            padding: 1rem;
-            border-radius: 4px;
-            margin-top: 2rem;
-        }
+    .materials-table th {
+        background-color: #533E2D;
+        color: #F0E68C;
+        padding: 12px;
+        text-align: left;
+        font-weight: bold;
+    }
 
-        .contact-info a {
-            color: #ffd700;
-            text-decoration: none;
-        }
+    .materials-table td {
+        padding: 12px;
+        border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+        color: white;
+    }
 
-        .contact-info a:hover {
-            text-decoration: underline;
-        }
+    .materials-table tr:hover {
+        background-color: rgba(255, 215, 0, 0.1);
+    }
 
-        @media (max-width: 768px) {
-            .terms-container {
-                margin: 1rem;
-                padding: 1rem;
-            }
-        }
-        .terms-container div p {
-            color: white
-        }
-        
-        .stVerticalBlock {
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-        }
-        
-        .st-emotion-cache-1flajlm {
-            width: 80vh !important;
-        }
+    .table-container {
+        margin: 20px 0;
+        overflow-x: auto;
+    }
 
-        .st-emotion-cache-4oy321 {
-            width: 40vw
-        }    
-              
-        
-        
-        
-        
-        
-        
-        
-        .suggested-questions {
-            position: fixed;
-            right: 10px;
-            top: 46%;
-            transform: translateY(-50%);
-            width: 180px;
-            background-color: rgba(89, 67, 48, 0.95);
-            border-radius: 6px;
-            padding: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-            margin-right: 6px;
-        }
-        
-        .suggested-questions h2{
-            margin-top: 0.6rem;
-        }
-        
-
-        .suggested-questions h2 {
-            color: #ffd700;
-            font-size: 0.9rem;
-            margin-bottom: 4px;
-            font-family: system-ui, -apple-system, sans-serif;
-        }
-
-        .questions-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            
-        }
- 
-
-
-        .questions-list div {
-            list-style-type: none; /* Quita la viñeta o número */
-            
-            margin-bottom: 2px;
-            line-height: 1.1;
-        }
-
-        .question-text {
-            width: 100%;
-            background-color: rgba(255, 215, 0, 0.1);
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            color: #e5e5e5;
-            padding: 6px 8px;
-            border-radius: 4px;
-            font-family: system-ui, -apple-system, sans-serif;
-            font-size: 0.75rem;
-            display: block;
-        }
-
-        @media (max-width: 768px) {
-            .suggested-questions {
-                display: none;
-            }
-        }
-        
-        
-        
-        .st-emotion-cache-1p2n2i4{
-            background-color: black !important;
-        }
-        .st-emotion-cache-128upt6{
-            background-color: rgb(30, 32, 42) !important;
-        }
-        
-        header{
-            background-color: rgb(30, 32, 42) !important;
-            color: color: #ffd700 !important;
-        }
-        
-        .st-emotion-cache-s046zg{
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            
-        }
-    
-    
-        .stVerticalBlock .stVerticalBlock .stVerticalBlock{
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-        } 
-        
-        .stVerticalBlock .stVerticalBlock h3 {
-            text-align: center
-        }
-        
-        .stVerticalBlock .stVerticalBlock p {
-            text-align: center
-        }
-        
-     
-        
-        .st-emotion-cache-n5r31u {
-            width: 100% !important;
-        }
-        
-        .st-emotion-cache-1igbibe {
-            width: 100% !important;
-        }
-        
-       .st-emotion-cache-phe2gf p {
-           width: 100% !important;
-       }
-       
-        .st-emotion-cache-phe2gf ol {
-           width: 100% !important;
-       }
-           
-       
-       
-    
-    
     </style>
-    """,
-    unsafe_allow_html=True
-)
+    """, unsafe_allow_html=True)
 
 def accept_terms():
     st.session_state.accepted = True
@@ -299,6 +160,52 @@ def read_terms():
 def rechazar_terminos():
     st.session_state.accepted = False
     st.rerun()
+
+def process_table_response(response_text):
+    """
+    Procesa la respuesta para convertir las tablas de markdown a HTML con estilos
+    """
+    if "```" in response_text:
+        parts = response_text.split("```")
+        result = parts[0]  # Texto antes de la tabla
+        
+        # Procesar cada sección de código/tabla
+        for i in range(1, len(parts), 2):
+            if i < len(parts):
+                table_content = parts[i].strip()
+                if "| Material |" in table_content:
+                    # Convertir la tabla Markdown a HTML
+                    html_table = '<div class="table-container"><table class="materials-table">'
+                    
+                    # Procesar las filas
+                    rows = [row.strip() for row in table_content.split('\n') if row.strip() and '|' in row]
+                    
+                    # Procesar encabezados
+                    headers = [header.strip() for header in rows[0].split('|')[1:-1]]
+                    html_table += '<thead><tr>'
+                    for header in headers:
+                        html_table += f'<th>{header.strip()}</th>'
+                    html_table += '</tr></thead>'
+                    
+                    # Procesar datos
+                    html_table += '<tbody>'
+                    for row in rows[2:]:  # Skip the header separator row
+                        cells = [cell.strip() for cell in row.split('|')[1:-1]]
+                        html_table += '<tr>'
+                        for cell in cells:
+                            html_table += f'<td>{cell}</td>'
+                        html_table += '</tr>'
+                    
+                    html_table += '</tbody></table></div>'
+                    result += html_table
+                else:
+                    result += parts[i]
+                
+                if i + 1 < len(parts):
+                    result += parts[i + 1]
+        
+        return result
+    return response_text
 
 api_key = st.secrets["OPENAI_API_KEY"]
 
@@ -324,7 +231,7 @@ def create_vectorstore(dataframe):
 vectorstore = create_vectorstore(df)
 retriever = vectorstore.as_retriever()
 
-# Template del prompt
+# Template del prompt actualizado
 prompt_template = PromptTemplate(
     input_variables=["context", "history", "question"],
     template=(
@@ -350,6 +257,13 @@ prompt_template = PromptTemplate(
 "- Empezar con la recomendación principal\n"
 "- Justificar cada sugerencia\n"
 "- Incluir alternativas si procede\n\n"
+"IMPORTANTE: Cuando el usuario mencione una estancia específica (cocina, baño, salón, etc.), "
+"DEBES presentar la información en formato tabla como se muestra a continuación:\n\n"
+"```\n"
+"| Material | Marca | Precio/m² | Características | Mantenimiento |\n"
+"| -------- | ----- | --------- | --------------- | ------------- |\n"
+"| [Material1] | [Marca1] | [Precio1] | [Características1] | [Mantenimiento1] |\n"
+"```\n\n"
 "FUNCIÓN DE BÚSQUEDA:\n"
 "Si el cliente solicita 'VER MATERIALES', mostrar:\n"
 "'De acuerdo a nuestra base de datos, os detallo todos los pavimentos disponibles:\n"
@@ -397,6 +311,11 @@ prompt_template = PromptTemplate(
 "'Vale, vamos a analizar vuestra consulta:\n"
 "1. Estancia: Cocina de alto tránsito\n"
 "2. Necesidades: Resistencia a manchas y durabilidad\n"
+"```\n"
+"| Material | Marca | Precio/m² | Características | Mantenimiento |\n"
+"| Porcelánico | Porcelanosa | 40-60€ | Alta resistencia, impermeable | Limpieza simple |\n"
+"| Gres | Roca | 30-45€ | Buena resistencia, antideslizante | Limpieza regular |\n"
+"```\n"
 "3. Os recomiendo porcelánico rectificado porque:\n"
 "- Es el más resistente a manchas y humedad\n"
 "- Tiene una durabilidad superior a 20 años\n"
@@ -405,12 +324,7 @@ prompt_template = PromptTemplate(
 "Si la pregunta NO es sobre suelos, responde:\n"
 "'Disculpad, pero mi especialidad son exclusivamente los pavimentos. Para aseguraros la mejor asesoría, ¿tenéis alguna consulta específica sobre tipos de suelos, instalación o presupuestos?'\n\n"
 "Historial de la conversación: {history}\n\n"
-"Información relevante del contexto: {context}\n\n"
-"Pregunta actual: {question}\n\n"
-"Respuesta:"
-    )
-)
-
+"Información relevante del contexto: {context}\
 qa_chain = RetrievalQA.from_chain_type(
     llm=llm,
     retriever=retriever,
@@ -632,3 +546,4 @@ else:
                     st.session_state.current_conversation.append({"sender": "assistant", "text": ai_response})
                 except Exception as e:
                     st.error(f"Error al procesar tu solicitud: {e}")
+
