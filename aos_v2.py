@@ -135,7 +135,7 @@ st.markdown("""
         z-index: 1000;
         margin-right: 6px;
     }
-
+    
     .questions-list {
         list-style: none;
         padding: 0;
@@ -201,7 +201,43 @@ def process_table_response(response_text):
                 result += parts[i + 1]
 
     return result
-    
+
+def generate_ai_response(user_input, api_messages):
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4",
+            messages=api_messages,
+            max_tokens=2000,
+            temperature=0.7,
+            presence_penalty=0.6,
+            frequency_penalty=0.3,
+            stop=None
+        )
+        
+        ai_response = response.choices[0].message.content.strip()
+        
+        # Procesamiento especial para asegurar que la tabla se genere
+        estancias = ['cocina', 'baño', 'salon', 'dormitorio', 'habitacion', 'terraza']
+        if any(estancia in user_input.lower() for estancia in estancias) and '```' not in ai_response:
+            # Forzar la generación de la tabla si no está presente
+            new_response = client.chat.completions.create(
+                model="gpt-4",
+                messages=[
+                    {"role": "system", "content": "Genera una tabla de materiales con este formato exacto:\n```\n| Material | Marca | Precio/m² | Características | Mantenimiento |\n| -------- | ----- | --------- | --------------- | ------------- |\n| Porcelánico | Porcelanosa | 40-60€ | Alta resistencia | Limpieza simple |\n```"},
+                    {"role": "user", "content": f"Genera una tabla de materiales para {user_input}"}
+                ],
+                max_tokens=500,
+                temperature=0.7
+            )
+            tabla = new_response.choices[0].message.content.strip()
+            ai_response = tabla + "\n\n" + ai_response
+            
+        processed_response = process_table_response(ai_response)
+        return processed_response
+        
+    except Exception as e:
+        return f"Error al procesar tu solicitud: {str(e)}"
+
 def accept_terms():
     st.session_state.accepted = True
     st.session_state.current_conversation.append({
@@ -242,43 +278,31 @@ def create_vectorstore(dataframe):
 vectorstore = create_vectorstore(df)
 retriever = vectorstore.as_retriever()
 
+# Template del prompt actualizado
 prompt_template = PromptTemplate(
     input_variables=["context", "history", "question"],
     template=(
-        "[INSTRUCCIÓN PRINCIPAL] Al detectar una estancia (cocina, baño, salón, dormitorio, etc.), DEBES GENERAR UNA TABLA como la del ejemplo. "
-        "NO CONTINÚES con ninguna otra respuesta hasta haber generado la tabla.\n\n"
-        "FORMATO DE TABLA OBLIGATORIO:\n"
+        "INSTRUCCIÓN CRÍTICA: DEBES seguir este formato EXACTO al responder:\n\n"
+        "SI la pregunta menciona alguna de estas palabras: cocina, baño, salón, dormitorio, habitación, terraza\n"
+        "ENTONCES tu respuesta DEBE empezar SIEMPRE con:\n\n"
+        "'Entendido. Para [estancia mencionada], aquí están las opciones recomendadas:\n\n"
         "```\n"
         "| Material | Marca | Precio/m² | Características | Mantenimiento |\n"
         "| -------- | ----- | --------- | --------------- | ------------- |\n"
         "| Porcelánico | Porcelanosa | 40-60€ | Alta resistencia | Limpieza diaria |\n"
         "| Gres | Roca | 30-45€ | Antideslizante | Semanal |\n"
         "| Vinílico | Tarkett | 25-35€ | Impermeable | Mensual |\n"
-        "```\n\n"
-        "FLUJO DE RESPUESTA OBLIGATORIO:\n"
-        "1. Identifica si se menciona una estancia\n"
-        "2. Si se menciona una estancia, PRIMERO muestra la tabla\n"
-        "3. DESPUÉS de la tabla, continúa con el análisis\n\n"
-        "PALABRAS CLAVE QUE REQUIEREN TABLA:\n"
-        "- cocina\n"
-        "- baño\n"
-        "- salón\n"
-        "- dormitorio\n"
-        "- habitación\n"
-        "- terraza\n\n"
-        "IMPORTANTE: Si identificas cualquiera de estas palabras clave en la pregunta del usuario, DEBES empezar tu respuesta con la tabla.\n\n"
-        "Después de la tabla, puedes continuar con el siguiente proceso de pensamiento:\n"
-        "1. ANÁLISIS INICIAL:\n"
-        "- ¿Qué tipo de estancia estamos valorando?\n"
-        "- ¿Qué necesitáis específicamente?\n"
-        "- ¿Tenéis restricciones de presupuesto o preferencias?\n"
-        "2. EVALUACIÓN DE NECESIDADES\n"
-        "3. SELECCIÓN DE OPCIONES\n"
-        "4. ANÁLISIS DE PRESUPUESTO\n\n"
-        "Información del contexto: {context}\n"
-        "Historial de la conversación: {history}\n"
-        "Pregunta actual: {question}\n\n"
-        "Respuesta (RECUERDA: SI SE MENCIONA UNA ESTANCIA, EMPIEZA CON LA TABLA):"
+        "```'\n\n"
+        "Y SOLO DESPUÉS de la tabla, continuar con el análisis normal.\n\n"
+        "REGLA ABSOLUTA: Si detectas una estancia, la tabla DEBE ser lo primero en tu respuesta.\n\n"
+        "Tras la tabla, continúa con:\n"
+        "1. Análisis de necesidades\n"
+        "2. Recomendaciones específicas\n"
+        "3. Presupuesto y consideraciones\n\n"
+        "Contexto: {context}\n"
+        "Historial: {history}\n"
+        "Pregunta: {question}\n\n"
+        "RECUERDA: SI SE MENCIONA UNA ESTANCIA, LA TABLA VA PRIMERO."
     )
 )
 
@@ -336,14 +360,13 @@ with st.sidebar:
             if st.button("Nueva Conversación"):
                 start_new_conversation()
             st.markdown("### Conversaciones Guardadas")
+        if st.session_state
+        # Continuación del código anterior...
+
         if st.session_state.conversations:
             for i, conv in enumerate(st.session_state.conversations):
                 if st.button(conv["name"], key=f"load_{i}"):
                     load_conversation(i)
-        else:
-            st.markdown
-            # Continuación del código anterior...
-
         else:
             st.markdown("No hay conversaciones guardadas.")
 
@@ -476,16 +499,7 @@ else:
         with st.chat_message("assistant"):
             with st.spinner("Procesando..."):
                 try:
-                    response = client.chat.completions.create(
-                    model="gpt-4",
-                    messages=api_messages,
-                    max_tokens=2000,  # Aumentado de 1000 a 2000
-                    temperature=0.7,
-                    presence_penalty=0.6,  # Añadido para fomentar respuestas más creativas
-                     frequency_penalty=0.3, # Añadido para evitar repeticiones
-                    )
-                    ai_response = response.choices[0].message.content.strip()
-                    processed_response = process_table_response(ai_response)
+                    processed_response = generate_ai_response(user_input, api_messages)
                     st.markdown(processed_response, unsafe_allow_html=True)
                     st.session_state.current_conversation.append({
                         "sender": "assistant",
