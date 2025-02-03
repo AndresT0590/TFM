@@ -361,8 +361,6 @@ with st.sidebar:
                 start_new_conversation()
             st.markdown("### Conversaciones Guardadas")
         if st.session_state:
-        # Continuación del código anterior...
-
         if st.session_state.conversations:
             for i, conv in enumerate(st.session_state.conversations):
                 if st.button(conv["name"], key=f"load_{i}"):
