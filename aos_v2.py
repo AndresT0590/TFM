@@ -25,7 +25,8 @@ if "active_conversation_index" not in st.session_state:
     st.session_state.active_conversation_index = None
 
 # Estilos CSS personalizados
-st.markdown("""
+st.markdown(
+ """
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
 
@@ -44,6 +45,8 @@ st.markdown("""
         text-align: center;
         font-size: 30px;
     }
+    
+    
 
     section[data-testid="stSidebar"] {
         background-color: #533E2D !important;
@@ -80,168 +83,206 @@ st.markdown("""
         color: white;
         margin-bottom: 10px;
     }
-
-    .terms-container {
-        max-width: 800px;
-        margin: 2rem auto;
-        padding: 2rem;
-        background-color: rgba(89, 67, 48, 0.9);
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .materials-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 1rem 0;
-        background-color: rgba(89, 67, 48, 0.9);
-        border-radius: 8px;
-        overflow: hidden;
-    }
-
-    .materials-table th {
-        background-color: #533E2D;
-        color: #F0E68C;
-        padding: 12px;
-        text-align: left;
-        font-weight: bold;
-    }
-
-    .materials-table td {
-        padding: 12px;
-        border-bottom: 1px solid rgba(255, 215, 0, 0.1);
-        color: white;
-    }
-
-    .materials-table tr:hover {
-        background-color: rgba(255, 215, 0, 0.1);
-    }
-
-    .table-container {
-        margin: 20px 0;
-        overflow-x: auto;
-    }
-
-    .suggested-questions {
-        position: fixed;
-        right: 10px;
-        top: 46%;
-        transform: translateY(-50%);
-        width: 180px;
-        background-color: rgba(89, 67, 48, 0.95);
-        border-radius: 6px;
-        padding: 10px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        z-index: 1000;
-        margin-right: 6px;
-    }
     
-    .questions-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
+        
+    .terms-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: rgba(89, 67, 48, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-    .question-text {
-        width: 100%;
-        background-color: rgba(255, 215, 0, 0.1);
-        border: 1px solid rgba(255, 215, 0, 0.3);
-        color: #e5e5e5;
-        padding: 6px 8px;
-        border-radius: 4px;
-        font-size: 0.75rem;
-    }
+        h2 {
+            color: #ffd700;
+            margin-top: 2rem;
+            font-size: 1.5rem;
+        }
+        h3 {
+            color: #ffd700;
+            margin-top: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        p, ul, ol {
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .contact-info {
+            background-color: rgba(255, 215, 0, 0.1);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 2rem;
+        }
+
+        .contact-info a {
+            color: #ffd700;
+            text-decoration: none;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .terms-container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+        }
+        .terms-container div p {
+            color: white
+        }
+        
+        .stVerticalBlock {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+        }
+        
+        .st-emotion-cache-1flajlm {
+            width: 80vh !important;
+        }
+
+        .st-emotion-cache-4oy321 {
+            width: 40vw
+        }    
+              
+        
+        
+        
+        
+        
+        
+        
+        .suggested-questions {
+            position: fixed;
+            right: 10px;
+            top: 46%;
+            transform: translateY(-50%);
+            width: 180px;
+            background-color: rgba(89, 67, 48, 0.95);
+            border-radius: 6px;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            margin-right: 6px;
+        }
+        
+        .suggested-questions h2{
+            margin-top: 0.6rem;
+        }
+        
+
+        .suggested-questions h2 {
+            color: #ffd700;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        .questions-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            
+        }
+ 
+
+
+        .questions-list div {
+            list-style-type: none; /* Quita la viñeta o número */
+            
+            margin-bottom: 2px;
+            line-height: 1.1;
+        }
+
+        .question-text {
+            width: 100%;
+            background-color: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            color: #e5e5e5;
+            padding: 6px 8px;
+            border-radius: 4px;
+            font-family: system-ui, -apple-system, sans-serif;
+            font-size: 0.75rem;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .suggested-questions {
+                display: none;
+            }
+        }
+        
+        
+        
+        .st-emotion-cache-1p2n2i4{
+            background-color: black !important;
+        }
+        .st-emotion-cache-128upt6{
+            background-color: rgb(30, 32, 42) !important;
+        }
+        
+        header{
+            background-color: rgb(30, 32, 42) !important;
+            color: color: #ffd700 !important;
+        }
+        
+        .st-emotion-cache-s046zg{
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            
+        }
+    
+    
+        .stVerticalBlock .stVerticalBlock .stVerticalBlock{
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+        } 
+        
+        .stVerticalBlock .stVerticalBlock h3 {
+            text-align: center
+        }
+        
+        .stVerticalBlock .stVerticalBlock p {
+            text-align: center
+        }
+        
+     
+        
+        .st-emotion-cache-n5r31u {
+            width: 100% !important;
+        }
+        
+        .st-emotion-cache-1igbibe {
+            width: 100% !important;
+        }
+        
+       .st-emotion-cache-phe2gf p {
+           width: 100% !important;
+       }
+       
+        .st-emotion-cache-phe2gf ol {
+           width: 100% !important;
+       }
+           
+       
+       
+    
+    
     </style>
-    """, unsafe_allow_html=True)
-
-def process_table_response(response_text):
-    """Procesa la respuesta para convertir las tablas de markdown a HTML"""
-    if "
-" not in response_text:
-        return response_text
-
-    parts = response_text.split("
-")
-    result = parts[0]  # Texto antes de la tabla
-
-    for i in range(1, len(parts), 2):
-        if i < len(parts):
-            table_content = parts[i].strip()
-            if "|" in table_content and "Material" in table_content:
-                # Convertir la tabla Markdown a HTML
-                html_table = '<div class="table-container"><table class="materials-table">'
-                
-                # Procesar las filas
-                rows = [row.strip() for row in table_content.split('\n') if row.strip() and '|' in row]
-                
-                # Procesar encabezados
-                if rows:
-                    headers = [header.strip() for header in rows[0].split('|')[1:-1]]
-                    html_table += '<thead><tr>'
-                    for header in headers:
-                        html_table += f'<th>{header.strip()}</th>'
-                    html_table += '</tr></thead>'
-                
-                # Procesar datos (saltar la primera fila de encabezados y la segunda de separadores)
-                if len(rows) > 2:
-                    html_table += '<tbody>'
-                    for row in rows[2:]:
-                        cells = [cell.strip() for cell in row.split('|')[1:-1]]
-                        if len(cells) == len(headers):  # Asegurarse de que la fila tenga el número correcto de celdas
-                            html_table += '<tr>'
-                            for cell in cells:
-                                html_table += f'<td>{cell}</td>'
-                            html_table += '</tr>'
-                    html_table += '</tbody>'
-                
-                html_table += '</table></div>'
-                result += html_table
-            else:
-                result += parts[i]
-            
-            if i + 1 < len(parts):
-                result += parts[i + 1]
-
-    return result
-
-def generate_ai_response(user_input, api_messages):
-    try:
-        response = client.chat.completions.create(
-            model="gpt-4",
-            messages=api_messages,
-            max_tokens=2000,
-            temperature=0.7,
-            presence_penalty=0.6,
-            frequency_penalty=0.3,
-            stop=None
-        )
-        
-        ai_response = response.choices[0].message.content.strip()
-        
-        # Procesamiento especial para asegurar que la tabla se genere
-        estancias = ['cocina', 'baño', 'salon', 'dormitorio', 'habitacion', 'terraza']
-        if any(estancia in user_input.lower() for estancia in estancias) and '
-' not in ai_response:
-            # Forzar la generación de la tabla si no está presente
-            new_response = client.chat.completions.create(
-                model="gpt-4",
-                messages=[
-                    {"role": "system", "content": "Genera una tabla de materiales con este formato exacto:\n
-\n| Material | Marca | Precio/m² | Características | Mantenimiento |\n| -------- | ----- | --------- | --------------- | ------------- |\n| Porcelánico | Porcelanosa | 40-60€ | Alta resistencia | Limpieza simple |\n
-"},
-                    {"role": "user", "content": f"Genera una tabla de materiales para {user_input}"}
-                ],
-                max_tokens=500,
-                temperature=0.7
-            )
-            tabla = new_response.choices[0].message.content.strip()
-            ai_response = tabla + "\n\n" + ai_response
-            
-        processed_response = process_table_response(ai_response)
-        return processed_response
-        
-    except Exception as e:
-        return f"Error al procesar tu solicitud: {str(e)}"
+    """,
+    unsafe_allow_html=True
+)
 
 def accept_terms():
     st.session_state.accepted = True
@@ -283,33 +324,90 @@ def create_vectorstore(dataframe):
 vectorstore = create_vectorstore(df)
 retriever = vectorstore.as_retriever()
 
-# Template del prompt actualizado
+# Template del prompt
 prompt_template = PromptTemplate(
     input_variables=["context", "history", "question"],
     template=(
-        "INSTRUCCIÓN CRÍTICA: DEBES seguir este formato EXACTO al responder:\n\n"
-        "SI la pregunta menciona alguna de estas palabras: cocina, baño, salón, dormitorio, habitación, terraza\n"
-        "ENTONCES tu respuesta DEBE empezar SIEMPRE con:\n\n"
-        "'Entendido. Para [estancia mencionada], aquí están las opciones recomendadas:\n\n"
-        "
-\n"
-        "| Material | Marca | Precio/m² | Características | Mantenimiento |\n"
-        "| -------- | ----- | --------- | --------------- | ------------- |\n"
-        "| Porcelánico | Porcelanosa | 40-60€ | Alta resistencia | Limpieza diaria |\n"
-        "| Gres | Roca | 30-45€ | Antideslizante | Semanal |\n"
-        "| Vinílico | Tarkett | 25-35€ | Impermeable | Mensual |\n"
-        "
-'\n\n"
-        "Y SOLO DESPUÉS de la tabla, continuar con el análisis normal.\n\n"
-        "REGLA ABSOLUTA: Si detectas una estancia, la tabla DEBE ser lo primero en tu respuesta.\n\n"
-        "Tras la tabla, continúa con:\n"
-        "1. Análisis de necesidades\n"
-        "2. Recomendaciones específicas\n"
-        "3. Presupuesto y consideraciones\n\n"
-        "Contexto: {context}\n"
-        "Historial: {history}\n"
-        "Pregunta: {question}\n\n"
-        "RECUERDA: SI SE MENCIONA UNA ESTANCIA, LA TABLA VA PRIMERO."
+       "Eres un experto asesor en pavimentos con más de 15 años de experiencia en España. Tu objetivo es guiar al cliente de manera clara y específica."
+"\nPROCESO DE PENSAMIENTO para cada consulta:\n"
+"1. ANÁLISIS INICIAL:\n"
+"- ¿Qué tipo de estancia estamos valorando? (cocina, baño, salón...)\n"
+"- ¿Qué necesitáis específicamente?\n"
+"- ¿Tenéis restricciones de presupuesto o preferencias?\n"
+"2. EVALUACIÓN DE NECESIDADES:\n"
+"- Nivel de tránsito en la zona\n"
+"- Exposición a humedad o condiciones especiales\n"
+"- Requisitos de mantenimiento\n"
+"3. SELECCIÓN DE OPCIONES:\n"
+"- Identificar los 2-3 mejores materiales para el caso\n"
+"- Ordenarlos por relación calidad-precio\n"
+"- Considerar disponibilidad en vuestra zona\n"
+"4. ANÁLISIS DE PRESUPUESTO:\n"
+"- Tarifa del material por metro cuadrado\n"
+"- Mano de obra estimada\n"
+"- Extras (preparación, materiales adicionales)\n"
+"5. FORMULACIÓN DE RESPUESTA:\n"
+"- Empezar con la recomendación principal\n"
+"- Justificar cada sugerencia\n"
+"- Incluir alternativas si procede\n\n"
+"FUNCIÓN DE BÚSQUEDA:\n"
+"Si el cliente solicita 'VER MATERIALES', mostrar:\n"
+"'De acuerdo a nuestra base de datos, os detallo todos los pavimentos disponibles:\n"
+"1. CERÁMICOS:\n"
+"* Porcelánico\n"
+"* Gres\n"
+"* Características: resistencia, durabilidad, precio\n"
+"2. MADERA:\n"
+"* Tarima\n"
+"* Parquet\n"
+"* Características: calidez, estética, mantenimiento\n"
+"3. VINÍLICOS Y LAMINADOS:\n"
+"* Características: precio económico, fácil instalación\n"
+"4. PIEDRA NATURAL:\n"
+"* Mármol\n"
+"* Pizarra\n"
+"* Características: exclusividad, durabilidad\n"
+"5. CEMENTO Y HORMIGÓN:\n"
+"* Características: resistencia, estilo industrial\n"
+"¿Queréis información detallada de algún material específico?'\n\n"
+"\nPautas de comunicación:\n"
+"- Explica siempre el PORQUÉ de tus recomendaciones\n"
+"- Divide los tipos de pavimento por categorías claras:\n"
+"* Cerámicos (porcelánico, gres...)\n"
+"* Madera (tarima, parquet...)\n"
+"* Vinílicos y laminados\n"
+"* Piedra natural (mármol, pizarra...)\n"
+"* Cemento y hormigón\n"
+"- Para cada recomendación, menciona:\n"
+"* Ventajas específicas del material\n"
+"* Desventajas o limitaciones\n"
+"* Rango de tarifas actual en España\n"
+"* Mantenimiento necesario\n"
+"- Si preguntan por precios:\n"
+"* Da siempre un rango (mínimo - máximo)\n"
+"* Especifica si incluye o no IVA\n"
+"* Menciona factores que pueden variar el presupuesto\n\n"
+"REGLAS IMPORTANTES:\n"
+"1. Si no estás seguro de un dato específico, indícalo\n"
+"2. Cuando hables de tarifas, especifica que son orientativas\n"
+"3. Si mencionan una zona de España, adapta tus recomendaciones al clima local\n"
+"4. Corrige amablemente si confunden términos técnicos\n"
+"5. NO respondas a preguntas sobre paredes, techos u otros elementos que no sean pavimentos\n\n"
+"Ejemplo de respuesta estructurada:\n"
+"'Vale, vamos a analizar vuestra consulta:\n"
+"1. Estancia: Cocina de alto tránsito\n"
+"2. Necesidades: Resistencia a manchas y durabilidad\n"
+"3. Os recomiendo porcelánico rectificado porque:\n"
+"- Es el más resistente a manchas y humedad\n"
+"- Tiene una durabilidad superior a 20 años\n"
+"- Tarifa actual: 30-60€/m² (material)\n"
+"- Mano de obra: 20-35€/m² adicionales'\n\n"
+"Si la pregunta NO es sobre suelos, responde:\n"
+"'Disculpad, pero mi especialidad son exclusivamente los pavimentos. Para aseguraros la mejor asesoría, ¿tenéis alguna consulta específica sobre tipos de suelos, instalación o presupuestos?'\n\n"
+"Historial de la conversación: {history}\n\n"
+"Información relevante del contexto: {context}\n\n"
+"Pregunta actual: {question}\n\n"
+"Respuesta:"
     )
 )
 
@@ -360,31 +458,38 @@ def load_conversation(index):
 
 # Sidebar
 with st.sidebar:
-    st.title("Historial de conversaciones")
-    st.markdown("---")
+    
+    
+    
+    
     with st.container():
+        st.title("Historial de conversaciones")
+        st.markdown("---")
         with st.container():
-            if st.button("Nueva Conversación"):
-                start_new_conversation()
-            st.markdown("### Conversaciones Guardadas")
-if st.session_state:
-     if st.session_state.conversations:
-        for i, conv in enumerate(st.session_state.conversations):
-            if st.button(conv["name"], key=f"load_{i}"):
-                load_conversation(i)
-else:
-        st.markdown("No hay conversaciones guardadas.")
+            
+            with st.container():
+                if st.button("Nueva Conversación"):
+                    start_new_conversation()
+                st.markdown("### Conversaciones Guardadas")
+            if st.session_state.conversations:
+                for i, conv in enumerate(st.session_state.conversations):
+                    if st.button(conv["name"], key=f"load_{i}"):
+                        load_conversation(i)
+            else:
+                st.markdown("No hay conversaciones guardadas.")
 
-
-        with st.container():
-            image = Image.open("./android-chrome-512x512.png")
-            st.image(image, width=150)
+            with st.container():
+                image = Image.open("./android-chrome-512x512.png")
+    
+                st.image(image, width=150)
 
 # Contenido principal
 st.title("Merlin's Floors")
 
 # Mostrar mensaje de bienvenida y términos si no han sido aceptados
 if st.session_state.accepted == 'terminos':
+    
+    
     st.markdown("""
    <div class="terms-container">
    <h1>Términos y Condiciones del Servicio</h1>
@@ -421,10 +526,11 @@ if st.session_state.accepted == 'terminos':
        </div>
    </div>
 </div>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
     with st.container():
         if st.button("Aceptar"):
             accept_terms()
+                
         if st.button("Rechazar"):
             rechazar_terminos()
              
@@ -432,8 +538,8 @@ elif not st.session_state.accepted:
     st.markdown("""
         <div class="welcome-message">
             <h2>¡Bienvenido a Merlin's Floors!</h2>
-            <p>Tu asistente experto en hacer realidad tus sueños de remodelación. Estamos aquí para ayudarte con todo lo relacionado con suelos, desde consejos hasta presupuestos aproximados.</p>
-            <p><strong>Este proyecto es de carácter académico. La información proporcionada es orientativa, por lo que podéis estar tranquilos, no será almacenada.</strong> </p>
+            <p>Tu asistente experto en hacer realidad tus sueños de remodelación. Estamos aquí para echarte una mano con todo lo relacionado con suelos, desde consejos hasta presupuestos aproximados.</p>
+            <p><strong>Este proyecto es de carácter académico. La información proporcionada es orientativa, por lo que podéis estar tranquilos, no será almacenada..</strong> </p>
             <p>Para continuar, por favor acepta nuestros términos y condiciones.</p>
         </div>
     """, unsafe_allow_html=True)
@@ -447,8 +553,11 @@ elif not st.session_state.accepted:
                 read_terms()
     
 else:
+
+        
     st.markdown("""
-    <div class="suggested-questions">
+                
+   <div class="suggested-questions">
         <h2>Preguntas Sugeridas</h2>
         <div class="questions-list">
             <div>
@@ -468,12 +577,18 @@ else:
             </div>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+                
+                
+                
+                """,unsafe_allow_html=True)
     
     # Mostrar historial de mensajes
     for message in st.session_state.current_conversation:
         with st.chat_message(message["sender"]):
-            st.markdown(message["text"], unsafe_allow_html=True)
+            st.markdown(message["text"])
+            
+    
+    
 
     # Entrada del usuario
     if user_input := st.chat_input("Escribe tu consulta aquí..."):
@@ -503,13 +618,17 @@ else:
             api_messages.append({"role": role, "content": msg["text"]})
 
         with st.chat_message("assistant"):
+            
             with st.spinner("Procesando..."):
                 try:
-                    processed_response = generate_ai_response(user_input, api_messages)
-                    st.markdown(processed_response, unsafe_allow_html=True)
-                    st.session_state.current_conversation.append({
-                        "sender": "assistant",
-                        "text": processed_response
-                    })
+                    response = client.chat.completions.create(
+                        model="gpt-4",
+                        messages=api_messages,
+                        max_tokens=500,
+                        temperature=0.7,
+                    )
+                    ai_response = response.choices[0].message.content.strip()
+                    st.markdown(ai_response)
+                    st.session_state.current_conversation.append({"sender": "assistant", "text": ai_response})
                 except Exception as e:
-                    st.error(f"Error al procesar tu solicitud: {e}") 
+                    st.error(f"Error al procesar tu solicitud: {e}")
