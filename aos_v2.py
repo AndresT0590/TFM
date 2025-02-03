@@ -366,9 +366,7 @@ if st.session_state:
             if st.button(conv["name"], key=f"load_{i}"):
                 load_conversation(i)
 else:
-        st.markdown("No hay conversaciones guardadas.")
-
-
+    st.markdown("No hay conversaciones guardadas.")
         with st.container():
             image = Image.open("./android-chrome-512x512.png")
             st.image(image, width=150)
