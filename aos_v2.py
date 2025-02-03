@@ -360,7 +360,7 @@ with st.sidebar:
             if st.button("Nueva Conversación"):
                 start_new_conversation()
             st.markdown("### Conversaciones Guardadas")
-        if st.session_state
+        if st.session_state:
         # Continuación del código anterior...
 
         if st.session_state.conversations:
