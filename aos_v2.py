@@ -424,7 +424,7 @@ elif not st.session_state.accepted:
     st.markdown("""
         <div class="welcome-message">
             <h2>¡Bienvenido a Merlin's Floors!</h2>
-            <p>Tu asistente experto en hacer realidad tus sueños de remodelación. Estamos aquí para echarte una mano con todo lo relacionado con suelos, desde consejos hasta presupuestos aproximados.</p>
+            <p>Tu asistente experto en hacer realidad tus sueños de remodelación. Estamos aquí para ayudarte con todo lo relacionado con suelos, desde consejos hasta presupuestos aproximados.</p>
             <p><strong>Este proyecto es de carácter académico. La información proporcionada es orientativa, por lo que podéis estar tranquilos, no será almacenada.</strong> </p>
             <p>Para continuar, por favor acepta nuestros términos y condiciones.</p>
         </div>
