@@ -360,13 +360,14 @@ with st.sidebar:
             if st.button("Nueva Conversación"):
                 start_new_conversation()
             st.markdown("### Conversaciones Guardadas")
-        if st.session_state:
+     if st.session_state:
         if st.session_state.conversations:
-            for i, conv in enumerate(st.session_state.conversations):
-                if st.button(conv["name"], key=f"load_{i}"):
-                    load_conversation(i)
-        else:
-            st.markdown("No hay conversaciones guardadas.")
+        for i, conv in enumerate(st.session_state.conversations):
+            if st.button(conv["name"], key=f"load_{i}"):
+                load_conversation(i)
+    else:
+        st.markdown("No hay conversaciones guardadas.")
+
 
         with st.container():
             image = Image.open("./android-chrome-512x512.png")
