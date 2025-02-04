@@ -324,6 +324,7 @@ def create_vectorstore(dataframe):
 vectorstore = create_vectorstore(df)
 retriever = vectorstore.as_retriever()
 # prompot
+# Template del prompt
 prompt_template = PromptTemplate(
     input_variables=["context", "history", "question"],
     template=(
