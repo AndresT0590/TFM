@@ -12,7 +12,7 @@ from langchain.prompts import PromptTemplate
 from PIL import Image
 
 # Configuración de la página
-st.set_page_config(page_title="Merlin's Floors", page_icon="./favicon.ico")
+st.set_page_config(page_title="Merlin's Floors", page_icon="favicon_io/favicon.ico")
 
 # Inicializar el estado de sesión
 if 'accepted' not in st.session_state:
@@ -307,9 +307,9 @@ client = OpenAI(api_key=api_key)
 llm = ChatOpenAI(model="gpt-4", openai_api_key=api_key)
 
 # Cargar y preparar datos
-data_path = "./BD_Final.csv"  
+data_path = "data/BD_Final.csv"  
 df = pd.read_csv(data_path,delimiter='\t')
-df['Contenido'] = df.iloc[:, 1:].apply(lambda row: " ".join(row.astype(str)), axis=1)
+df['Contenido'] = df.apply(lambda row: " ".join(row.astype(str)), axis=1)
 
 @st.cache_resource
 def create_vectorstore(dataframe):
@@ -323,88 +323,47 @@ def create_vectorstore(dataframe):
 
 vectorstore = create_vectorstore(df)
 retriever = vectorstore.as_retriever()
-# prompot
+
+# prompt
 # Template del prompt
 prompt_template = PromptTemplate(
     input_variables=["context", "history", "question"],
     template=(
-       "Eres un experto asesor en pavimentos con más de 15 años de experiencia en España. Tu objetivo es guiar al cliente de manera clara y específica."
-"\nPROCESO DE PENSAMIENTO para cada consulta:\n"
-"1. ANÁLISIS INICIAL:\n"
+"Eres un experto asesor en pavimentos con más de 15 años de experiencia en España. Tu objetivo es guiar al cliente de manera clara y específica."
+
+"**PROCESO DE PENSAMIENTO para cada consulta:**\n"
+"1. **CONTRAPREGUNTA INICIAL**:\n"
 "- ¿Qué tipo de estancia estamos valorando? (cocina, baño, salón...)\n"
 "- ¿Qué necesitáis específicamente?\n"
 "- ¿Tenéis restricciones de presupuesto o preferencias?\n"
-"2. EVALUACIÓN DE NECESIDADES:\n"
+
+"2. **EVALUACIÓN DE NECESIDADES**:\n"
 "- Nivel de tránsito en la zona\n"
 "- Exposición a humedad o condiciones especiales\n"
 "- Requisitos de mantenimiento\n"
-"3. SELECCIÓN DE OPCIONES:\n"
-"- Identificar los 2-3 mejores materiales para el caso\n"
-"- Ordenarlos por relación calidad-precio\n"
-"- Considerar disponibilidad en vuestra zona\n"
-"4. ANÁLISIS DE PRESUPUESTO:\n"
-"- Tarifa del material por metro cuadrado\n"
-"- Mano de obra estimada\n"
-"- Extras (preparación, materiales adicionales)\n"
-"5. FORMULACIÓN DE RESPUESTA:\n"
-"- Empezar con la recomendación principal\n"
-"- Justificar cada sugerencia\n"
-"- Incluir alternativas si procede\n\n"
-"FUNCIÓN DE BÚSQUEDA:\n"
-"Si el cliente solicita 'VER MATERIALES', mostrar:\n"
-"'De acuerdo a nuestra base de datos, os detallo todos los pavimentos disponibles:\n"
-"1. CERÁMICOS:\n"
-"* Porcelánico\n"
-"* Gres\n"
-"* Características: resistencia, durabilidad, precio\n"
-"2. MADERA:\n"
-"* Tarima\n"
-"* Parquet\n"
-"* Características: calidez, estética, mantenimiento\n"
-"3. VINÍLICOS Y LAMINADOS:\n"
-"* Características: precio económico, fácil instalación\n"
-"4. PIEDRA NATURAL:\n"
-"* Mármol\n"
-"* Pizarra\n"
-"* Características: exclusividad, durabilidad\n"
-"5. CEMENTO Y HORMIGÓN:\n"
-"* Características: resistencia, estilo industrial\n"
-"¿Queréis información detallada de algún material específico?'\n\n"
-"\nPautas de comunicación:\n"
-"- Explica siempre el PORQUÉ de tus recomendaciones\n"
-"- Divide los tipos de pavimento por categorías claras:\n"
-"* Cerámicos (porcelánico, gres...)\n"
-"* Madera (tarima, parquet...)\n"
-"* Vinílicos y laminados\n"
-"* Piedra natural (mármol, pizarra...)\n"
-"* Cemento y hormigón\n"
-"- Para cada recomendación, menciona:\n"
-"* Ventajas específicas del material\n"
-"* Desventajas o limitaciones\n"
-"* Rango de tarifas actual en España\n"
-"* Mantenimiento necesario\n"
-"- Si preguntan por precios:\n"
-"* Da siempre un rango (mínimo - máximo)\n"
-"* Especifica si incluye o no IVA\n"
-"* Menciona factores que pueden variar el presupuesto\n\n"
-"REGLAS IMPORTANTES:\n"
-"1. Si no estás seguro de un dato específico, indícalo\n"
-"2. Cuando hables de tarifas, especifica que son orientativas\n"
-"3. Si mencionan una zona de España, adapta tus recomendaciones al clima local\n"
-"4. Corrige amablemente si confunden términos técnicos\n"
-"5. NO respondas a preguntas sobre paredes, techos u otros elementos que no sean pavimentos\n\n"
-"Ejemplo de respuesta estructurada:\n"
-"'Vale, vamos a analizar vuestra consulta:\n"
-"1. Estancia: Cocina de alto tránsito\n"
-"2. Necesidades: Resistencia a manchas y durabilidad\n"
-"3. Os recomiendo porcelánico rectificado porque:\n"
-"- Es el más resistente a manchas y humedad\n"
-"- Tiene una durabilidad superior a 20 años\n"
-"- Tarifa actual: 30-60€/m² (material)\n"
-"- Mano de obra: 20-35€/m² adicionales'\n\n"
-"Si la pregunta NO es sobre suelos, responde:\n"
-"'Disculpad, pero mi especialidad son exclusivamente los pavimentos. Para aseguraros la mejor asesoría, ¿tenéis alguna consulta específica sobre tipos de suelos, instalación o presupuestos?'\n\n"
-"Historial de la conversación: {history}\n\n"
+
+"3. **SELECCIÓN DE OPCIONES Y TABLA DE MATERIALES**:\n"
+"Después de clarificar las necesidades, se proporcionará automáticamente una tabla con los materiales recomendados, extraídos de nuestra base de datos, mostrando todas sus características detalladas. Utiliza el siguiente formato Markdown para mostrar la tabla en Streamlit:\n"
+"```markdown\n"
+"| Nombre del Producto  | Tipo de Suelo | Espesor | Resistencia | Medidas (Ancho x Largo) | Precio por m² | Clima Adecuado | Características Adicionales |\n"
+"|----------------------|---------------|---------|-------------|------------------------|---------------|----------------|----------------------------|\n"
+"```\n"
+
+"4. **ANÁLISIS DE PRESUPUESTO**:\n"
+"- Basado en la selección de los materiales de la tabla y el área total, se calculará y proporcionará un presupuesto aproximado total para cada uno de los materiales, incluyendo los costos de materiales y mano de obra estimada.\n"
+
+"**Pautas de comunicación**:\n"
+"- Siempre explica el PORQUÉ de tus recomendaciones y ofrece alternativas si el cliente solicita más opciones.\n"
+"- Mantén las respuestas enfocadas exclusivamente en pavimentos; evita responder a preguntas sobre paredes, techos u otros elementos no relacionados.\n"
+"- Si la pregunta no es sobre suelos, responde: 'Disculpad, pero mi especialidad son exclusivamente los pavimentos. Para aseguraros la mejor asesoría, ¿tenéis alguna consulta específica sobre tipos de suelos, instalación o presupuestos?'\n"
+
+"**Ejemplo de interacción estructurada**:\n"
+"Usuario: 'Estoy considerando renovar el suelo de mi cocina.'\n"
+"Asistente: '¿Podrías decirme cuántos metros cuadrados tiene la cocina y si prefieres un tipo de material que sea especialmente resistente a la humedad?'\n"
+"Usuario responde y el asistente prosigue con la presentación de la tabla de materiales en formato Markdown y el cálculo del presupuesto aproximado total basado en la selección y el área especificada.\n"
+
+
+"\nHistorial de la conversación: {history}\n\n"
 "Información relevante del contexto: {context}\n\n"
 "Pregunta actual: {question}\n\n"
 "Respuesta:"
@@ -479,7 +438,7 @@ with st.sidebar:
                 st.markdown("No hay conversaciones guardadas.")
 
             with st.container():
-                image = Image.open("./android-chrome-512x512.png")
+                image = Image.open("favicon_io/android-chrome-512x512.png")
     
                 st.image(image, width=150)
 
@@ -624,7 +583,7 @@ else:
                     response = client.chat.completions.create(
                         model="gpt-4",
                         messages=api_messages,
-                        max_tokens=500,
+                        max_tokens=1500,
                         temperature=0.7,
                     )
                     ai_response = response.choices[0].message.content.strip()
